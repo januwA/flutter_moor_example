@@ -5,7 +5,9 @@ class MainStore {
 }
 
 class DBService {
-  final database = AppDatabase().taskDao;
+  AppDatabase _database = AppDatabase();
+  TaskDao get taskDao => _database.taskDao;
+  TagDao get tagDao => _database.tagDao;
 }
 
 final MainStore mainStore = MainStore();

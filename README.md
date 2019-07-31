@@ -2,4 +2,4 @@
 
 > Use the moor_flutter library instead of the sqflite library
 
-[video](https://www.youtube.com/watch?v=KczX8DISRgI)
+[video](https://www.youtube.com/watch?v=RsXZOuWAAVM)
