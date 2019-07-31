@@ -10,12 +10,12 @@ part of 'moor.db.dart';
 class Task extends DataClass implements Insertable<Task> {
   final int id;
   final String name;
-  final DateTime dueData;
+  final DateTime dueDate;
   final bool completed;
   Task(
       {@required this.id,
       @required this.name,
-      this.dueData,
+      this.dueDate,
       @required this.completed});
   factory Task.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
@@ -27,8 +27,8 @@ class Task extends DataClass implements Insertable<Task> {
     return Task(
       id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
       name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
-      dueData: dateTimeType
-          .mapFromDatabaseResponse(data['${effectivePrefix}due_data']),
+      dueDate: dateTimeType
+          .mapFromDatabaseResponse(data['${effectivePrefix}due_date']),
       completed:
           boolType.mapFromDatabaseResponse(data['${effectivePrefix}completed']),
     );
@@ -38,7 +38,7 @@ class Task extends DataClass implements Insertable<Task> {
     return Task(
       id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String>(json['name']),
-      dueData: serializer.fromJson<DateTime>(json['dueData']),
+      dueDate: serializer.fromJson<DateTime>(json['dueDate']),
       completed: serializer.fromJson<bool>(json['completed']),
     );
   }
@@ -48,7 +48,7 @@ class Task extends DataClass implements Insertable<Task> {
     return {
       'id': serializer.toJson<int>(id),
       'name': serializer.toJson<String>(name),
-      'dueData': serializer.toJson<DateTime>(dueData),
+      'dueDate': serializer.toJson<DateTime>(dueDate),
       'completed': serializer.toJson<bool>(completed),
     };
   }
@@ -58,20 +58,20 @@ class Task extends DataClass implements Insertable<Task> {
     return TasksCompanion(
       id: id == null && nullToAbsent ? const Value.absent() : Value(id),
       name: name == null && nullToAbsent ? const Value.absent() : Value(name),
-      dueData: dueData == null && nullToAbsent
+      dueDate: dueDate == null && nullToAbsent
           ? const Value.absent()
-          : Value(dueData),
+          : Value(dueDate),
       completed: completed == null && nullToAbsent
           ? const Value.absent()
           : Value(completed),
     ) as T;
   }
 
-  Task copyWith({int id, String name, DateTime dueData, bool completed}) =>
+  Task copyWith({int id, String name, DateTime dueDate, bool completed}) =>
       Task(
         id: id ?? this.id,
         name: name ?? this.name,
-        dueData: dueData ?? this.dueData,
+        dueDate: dueDate ?? this.dueDate,
         completed: completed ?? this.completed,
       );
   @override
@@ -79,7 +79,7 @@ class Task extends DataClass implements Insertable<Task> {
     return (StringBuffer('Task(')
           ..write('id: $id, ')
           ..write('name: $name, ')
-          ..write('dueData: $dueData, ')
+          ..write('dueDate: $dueDate, ')
           ..write('completed: $completed')
           ..write(')'))
         .toString();
@@ -87,7 +87,7 @@ class Task extends DataClass implements Insertable<Task> {
 
   @override
   int get hashCode => $mrjf($mrjc(
-      $mrjc($mrjc($mrjc(0, id.hashCode), name.hashCode), dueData.hashCode),
+      $mrjc($mrjc($mrjc(0, id.hashCode), name.hashCode), dueDate.hashCode),
       completed.hashCode));
   @override
   bool operator ==(other) =>
@@ -95,19 +95,19 @@ class Task extends DataClass implements Insertable<Task> {
       (other is Task &&
           other.id == id &&
           other.name == name &&
-          other.dueData == dueData &&
+          other.dueDate == dueDate &&
           other.completed == completed);
 }
 
 class TasksCompanion extends UpdateCompanion<Task> {
   final Value<int> id;
   final Value<String> name;
-  final Value<DateTime> dueData;
+  final Value<DateTime> dueDate;
   final Value<bool> completed;
   const TasksCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
-    this.dueData = const Value.absent(),
+    this.dueDate = const Value.absent(),
     this.completed = const Value.absent(),
   });
 }
@@ -133,13 +133,13 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
         minTextLength: 1, maxTextLength: 50);
   }
 
-  final VerificationMeta _dueDataMeta = const VerificationMeta('dueData');
-  GeneratedDateTimeColumn _dueData;
+  final VerificationMeta _dueDateMeta = const VerificationMeta('dueDate');
+  GeneratedDateTimeColumn _dueDate;
   @override
-  GeneratedDateTimeColumn get dueData => _dueData ??= _constructDueData();
-  GeneratedDateTimeColumn _constructDueData() {
+  GeneratedDateTimeColumn get dueDate => _dueDate ??= _constructDueDate();
+  GeneratedDateTimeColumn _constructDueDate() {
     return GeneratedDateTimeColumn(
-      'due_data',
+      'due_date',
       $tableName,
       true,
     );
@@ -155,7 +155,7 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
   }
 
   @override
-  List<GeneratedColumn> get $columns => [id, name, dueData, completed];
+  List<GeneratedColumn> get $columns => [id, name, dueDate, completed];
   @override
   $TasksTable get asDslTable => this;
   @override
@@ -177,11 +177,11 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
     } else if (name.isRequired && isInserting) {
       context.missing(_nameMeta);
     }
-    if (d.dueData.present) {
-      context.handle(_dueDataMeta,
-          dueData.isAcceptableValue(d.dueData.value, _dueDataMeta));
-    } else if (dueData.isRequired && isInserting) {
-      context.missing(_dueDataMeta);
+    if (d.dueDate.present) {
+      context.handle(_dueDateMeta,
+          dueDate.isAcceptableValue(d.dueDate.value, _dueDateMeta));
+    } else if (dueDate.isRequired && isInserting) {
+      context.missing(_dueDateMeta);
     }
     if (d.completed.present) {
       context.handle(_completedMeta,
@@ -209,8 +209,8 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
     if (d.name.present) {
       map['name'] = Variable<String, StringType>(d.name.value);
     }
-    if (d.dueData.present) {
-      map['due_data'] = Variable<DateTime, DateTimeType>(d.dueData.value);
+    if (d.dueDate.present) {
+      map['due_date'] = Variable<DateTime, DateTimeType>(d.dueDate.value);
     }
     if (d.completed.present) {
       map['completed'] = Variable<bool, BoolType>(d.completed.value);
@@ -228,6 +228,39 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(const SqlTypeSystem.withDefaults(), e);
   $TasksTable _tasks;
   $TasksTable get tasks => _tasks ??= $TasksTable(this);
+  TaskDao _taskDao;
+  TaskDao get taskDao => _taskDao ??= TaskDao(this as AppDatabase);
   @override
   List<TableInfo> get allTables => [tasks];
+}
+
+// **************************************************************************
+// DaoGenerator
+// **************************************************************************
+
+mixin _$TaskDaoMixin on DatabaseAccessor<AppDatabase> {
+  $TasksTable get tasks => db.tasks;
+  Task _rowToTask(QueryRow row) {
+    return Task(
+      id: row.readInt('id'),
+      name: row.readString('name'),
+      dueDate: row.readDateTime('due_date'),
+      completed: row.readBool('completed'),
+    );
+  }
+
+  Future<List<Task>> completedTasksGenerated(
+      {@Deprecated('No longer needed with Moor 1.6 - see the changelog for details')
+          QueryEngine operateOn}) {
+    return (operateOn ?? this).customSelect(
+        'SELECT * FROM tasks WHERE completed = 1 ORDER BY due_date DESC, name;',
+        variables: []).then((rows) => rows.map(_rowToTask).toList());
+  }
+
+  Stream<List<Task>> watchCompletedTasksGenerated() {
+    return customSelectStream(
+        'SELECT * FROM tasks WHERE completed = 1 ORDER BY due_date DESC, name;',
+        variables: [],
+        readsFrom: {tasks}).map((rows) => rows.map(_rowToTask).toList());
+  }
 }

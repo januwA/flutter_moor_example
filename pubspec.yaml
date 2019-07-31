@@ -9,18 +9,15 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^0.1.2
-  moor_flutter:
+  moor_flutter: ^1.6.0
+  flutter_material_color_picker: ^1.0.3
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  moor_generator: # use the latest versions
+  moor_generator: ^1.6.0
   build_runner:
 
-# For information on the generic Dart part of this file, see the
-# following page: https://dart.dev/tools/pub/pubspec
-
-# The following section is specific to Flutter.
 flutter:
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

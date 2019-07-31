@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_moor_demo/store/main/main.store.dart';
+import 'package:moor/moor.dart' as moor;
 
 import 'db/moor.db.dart';
 
@@ -22,6 +23,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   DateTime newTaskDate;
   TextEditingController controller;
+  bool showCompleted = false;
+
   @override
   void initState() {
     super.initState();
@@ -33,12 +36,30 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Tasks'),
+        actions: <Widget>[
+          Row(
+            children: <Widget>[
+              Text('Completed only'),
+              Switch(
+                value: showCompleted,
+                activeColor: Colors.white,
+                onChanged: (newValue) {
+                  setState(() {
+                    showCompleted = newValue;
+                  });
+                },
+              ),
+            ],
+          )
+        ],
       ),
       body: Column(
         children: <Widget>[
           Expanded(
             child: StreamBuilder<List<Task>>(
-              stream: mainStore.dbService.tasks$,
+              stream: showCompleted
+                  ? mainStore.dbService.database.watchCompletedTasks()
+                  : mainStore.dbService.database.watchAllTasks(),
               initialData: List<Task>(),
               builder: (context, snap) {
                 if (snap.connectionState == ConnectionState.active) {
@@ -62,7 +83,7 @@ class _HomePageState extends State<HomePage> {
                         },
                         child: CheckboxListTile(
                           title: Text(task.name),
-                          subtitle: Text(task.dueData?.toString() ?? 'No date'),
+                          subtitle: Text(task.dueDate?.toString() ?? 'No date'),
                           value: task.completed,
                           onChanged: (bool nv) {
                             mainStore.dbService.database
@@ -85,11 +106,11 @@ class _HomePageState extends State<HomePage> {
               controller: controller,
               decoration: InputDecoration(hintText: 'Task Name'),
               onSubmitted: (String v) {
-                mainStore.dbService.database.insertTask(
-                  name: v.trim(),
-                  dueData: newTaskDate,
+                final task = TasksCompanion(
+                  name: moor.Value(v.trim()),
+                  dueDate: moor.Value(newTaskDate),
                 );
-
+                mainStore.dbService.database.insertTask(task);
                 _reset();
               },
             ),
